@@ -117,3 +117,91 @@ https://docs.getdbt.com/docs/configure-your-profile
 [0m08:53:22.093758 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fba8e984fd0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fba8e9ab210>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7fba78fb5710>]}
 [0m08:53:22.095227 [debug] [MainThread]: Flushing usage events
 [0m08:53:23.493498 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m10:44:16.291056 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f867ac99e10>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f867af387d0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f867bc287d0>]}
+
+
+============================== 10:44:16.296549 | d3e455cb-a75e-483c-b0f7-f0be1e6c4090 ==============================
+[0m10:44:16.296549 [info ] [MainThread]: Running with dbt=1.9.2
+[0m10:44:16.297290 [debug] [MainThread]: running dbt with arguments {'printer_width': '80', 'indirect_selection': 'eager', 'write_json': 'True', 'log_cache_events': 'False', 'partial_parse': 'True', 'cache_selected_only': 'False', 'profiles_dir': '/opt/dbt/profiles', 'version_check': 'True', 'fail_fast': 'False', 'log_path': 'logs', 'warn_error': 'None', 'debug': 'False', 'use_colors': 'True', 'use_experimental_parser': 'False', 'empty': 'None', 'quiet': 'False', 'no_print': 'None', 'warn_error_options': 'WarnErrorOptions(include=[], exclude=[])', 'introspect': 'True', 'static_parser': 'True', 'invocation_command': 'dbt debug', 'target_path': 'None', 'log_format': 'default', 'send_anonymous_usage_stats': 'True'}
+[0m10:44:16.311412 [info ] [MainThread]: dbt version: 1.9.2
+[0m10:44:16.312664 [info ] [MainThread]: python version: 3.11.2
+[0m10:44:16.313038 [info ] [MainThread]: python path: /usr/local/bin/python
+[0m10:44:16.313322 [info ] [MainThread]: os info: Linux-6.10.14-linuxkit-x86_64-with-glibc2.31
+[0m10:44:16.511978 [error] [MainThread]: Encountered an error:
+
+[0m10:44:16.531033 [error] [MainThread]: Traceback (most recent call last):
+  File "/usr/local/lib/python3.11/site-packages/dbt/cli/requires.py", line 153, in wrapper
+    result, success = func(*args, **kwargs)
+                      ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/dbt/cli/requires.py", line 103, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/dbt/cli/main.py", line 414, in debug
+    results = task.run()
+              ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/dbt/task/debug.py", line 114, in run
+    load_profile_status: SubtaskStatus = self._load_profile()
+                                         ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/dbt/task/debug.py", line 205, in _load_profile
+    profile: Profile = Profile.render(
+                       ^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/dbt/config/profile.py", line 402, in render
+    return cls.from_raw_profiles(
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/dbt/config/profile.py", line 368, in from_raw_profiles
+    return cls.from_raw_profile_info(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/dbt/config/profile.py", line 324, in from_raw_profile_info
+    credentials: Credentials = cls._credentials_from_profile(
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/dbt/config/profile.py", line 148, in _credentials_from_profile
+    cls = load_plugin(typename)
+          ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/dbt/adapters/factory.py", line 239, in load_plugin
+    return FACTORY.load_plugin(name)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/dbt/adapters/factory.py", line 68, in load_plugin
+    mod: Any = import_module("." + name, "dbt.adapters")
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1206, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1178, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1149, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 690, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 940, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/usr/local/lib/python3.11/site-packages/dbt/adapters/bigquery/__init__.py", line 1, in <module>
+    from dbt.adapters.bigquery.column import BigQueryColumn
+  File "/usr/local/lib/python3.11/site-packages/dbt/adapters/bigquery/column.py", line 4, in <module>
+    from google.cloud.bigquery import SchemaField
+  File "/usr/local/lib/python3.11/site-packages/google/cloud/bigquery/__init__.py", line 36, in <module>
+    from google.cloud.bigquery.client import Client
+  File "/usr/local/lib/python3.11/site-packages/google/cloud/bigquery/client.py", line 72, in <module>
+    from google.cloud.bigquery import _job_helpers
+  File "/usr/local/lib/python3.11/site-packages/google/cloud/bigquery/_job_helpers.py", line 47, in <module>
+    from google.cloud.bigquery import job
+  File "/usr/local/lib/python3.11/site-packages/google/cloud/bigquery/job/__init__.py", line 27, in <module>
+    from google.cloud.bigquery.job.copy_ import CopyJob
+  File "/usr/local/lib/python3.11/site-packages/google/cloud/bigquery/job/copy_.py", line 22, in <module>
+    from google.cloud.bigquery.table import TableReference
+  File "/usr/local/lib/python3.11/site-packages/google/cloud/bigquery/table.py", line 28, in <module>
+    import pandas  # type: ignore
+    ^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pandas/__init__.py", line 26, in <module>
+    from pandas.compat import (
+  File "/usr/local/lib/python3.11/site-packages/pandas/compat/__init__.py", line 27, in <module>
+    from pandas.compat.pyarrow import (
+  File "/usr/local/lib/python3.11/site-packages/pandas/compat/pyarrow.py", line 8, in <module>
+    import pyarrow as pa
+  File "/usr/local/lib/python3.11/site-packages/pyarrow/__init__.py", line 65, in <module>
+    import pyarrow.lib as _lib
+  File "<frozen importlib._bootstrap>", line 405, in parent
+KeyboardInterrupt
+
+[0m10:44:16.533408 [debug] [MainThread]: Resource report: {"command_name": "debug", "command_success": false, "command_wall_clock_time": 0.27479658, "process_in_blocks": "12536", "process_kernel_time": 0.395738, "process_mem_max_rss": "135832", "process_out_blocks": "1588", "process_user_time": 2.266463}
+[0m10:44:16.534164 [debug] [MainThread]: Command `dbt debug` failed at 10:44:16.534060 after 0.28 seconds
+[0m10:44:16.534725 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f867b2535d0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f867ac9a590>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x7f8677130d10>]}
+[0m10:44:16.535287 [debug] [MainThread]: Flushing usage events
+[0m10:44:18.198186 [debug] [MainThread]: An error was encountered while trying to flush usage events

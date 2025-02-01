@@ -13,7 +13,7 @@ services:
             - ./library_dbt:/opt/dbt/library_dbt
             - ./logs:/opt/dbt/logs
             - ./profiles:/opt/dbt/profiles
-            - ./keys:/opt/dbt/keys
+            - ./keys/:/opt/dbt/keys/
         entrypoint: ["/bin/sh", "-c", "sleep infinity"]
 
 networks:
