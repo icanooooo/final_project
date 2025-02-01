@@ -1,0 +1,25 @@
+postgres:
+  host: "application_postgres"
+  port: 5432
+  database: "application_db"
+  username: "library_admin"
+  password: "letsreadbook"
+
+bigquery:
+  project: "purwadika"
+  dataset: "ihsan_perpustakaan_capstone_project_3"
+
+temp_storage:
+  type: "local"
+  location: "/tmp/data"
+
+tables:
+  - source: "books_table"
+    staging_table: "stg_books"
+    destination: "books"
+  - source: "library_member"
+    staging_table: "stg_member"
+    destination: "member"
+  - source: "rent_table"
+    staging_table: "stg_rent"
+    destination: "rent"

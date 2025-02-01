@@ -1,0 +1,21 @@
+services:
+  airflow_db:
+    image: postgres:latest
+    ports:
+      - "5434:5432" # Local host 5434 : Docker Container Port 5432
+    networks:
+      - application-network
+    environment:
+      POSTGRES_DB: airflow_db
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+    volumes:
+      - airflow_db_volumes:/var/lib/postgresql/data
+
+volumes:
+  airflow_db_volumes:
+
+networks:
+  application-network:
+    name: application-network
+    driver: bridge
