@@ -18,6 +18,25 @@ def generate_name():
     
     else:
         return f"error: {response.text}"
+    
+def choose_random_genre():
+    genres = ['Drama', 'Science Fiction', 'Romance', 'Biography', 'Self-help', 'Japanese Manga',
+              'Psychological', 'Fantasy', 'History', 'Anti Establishement']
+    
+    genre = random.choice(genres)
+
+    return genre
+
+def get_birthday():
+    start_date = datetime.strptime('1950-01-01', '%Y-%m-%d')
+    end_date = datetime.strptime('2010-01-01', '%Y-%m-%d')
+
+    delta = end_date - start_date
+    random_days = random.randint(0, delta.days)
+
+    random_date = start_date + timedelta(days=random_days)
+
+    return random_date
 
 def generate_member_data(last_id_number): #Menerima hanya int
     data = []
@@ -26,7 +45,7 @@ def generate_member_data(last_id_number): #Menerima hanya int
         user_data = {}
         user_data['id'] = last_id_number + 1 + i
         user_data['name'] = generate_name()
-        user_data['age'] = random.randint(15, 35)
+        user_data['date_of_birth'] = get_birthday()
         user_data['created_at'] = datetime.now(ZoneInfo('Asia/Jakarta')).strftime('%Y-%m-%d %H:%M:%S')
     
         data.append(user_data)
@@ -46,8 +65,8 @@ def generate_book_data(last_id_number): # Hanya menerima int
 
             data['id'] = last_id_number + i + 1
             data['title'] = response_data['title']
-            data['author_name'] = response_data['authors'][0]['name']
-            data['genre'] = response_data['subject'][0:3]
+            data['author_name'] = generate_name()
+            data['genre'] = choose_random_genre()
             data['release_year'] = response_data['first_publish_year']
             data['stock'] = random.randint(10, 20)
             data['created_at'] = datetime.now(ZoneInfo('Asia/Jakarta')).strftime('%Y-%m-%d %H:%M:%S')

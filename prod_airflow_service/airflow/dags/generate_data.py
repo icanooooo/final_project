@@ -43,7 +43,7 @@ def generate_member(**kwargs):
 
     member_data = generate_member_data(len(member_id_list))
 
-    return member_dataa
+    return member_data
 
 # Insert Member to Postgres
 def insert_member(**kwargs):

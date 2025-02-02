@@ -53,8 +53,8 @@ jika ingin memberhentikan service kita berikan command:
 ```
 docker compose -f prod_airflow_service/docker-compose.yaml down
 docker compose -f app_db/docker-compose.yaml down
-docker compose -f prod_airflow_db/docker-compose.yaml down
 docker compose -f dbt/docker-compose.yaml down
+docker compose -f prod_airflow_db/docker-compose.yaml down
 ```
 
 ## DAGs (Directed Acyclic Graphs)

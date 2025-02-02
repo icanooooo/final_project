@@ -18,7 +18,7 @@ def load_config():
 def get_data(temp_storage):
     category, asetku_data = get_data_asetku('https://www.asetku.co.id/')
 
-    df = create_asetku_dataframee(asetku_data)
+    df = create_asetku_dataframe(asetku_data)
 
     temp_file_path = os.path.join(temp_storage, "asetku_data.csv")
     df.to_csv(temp_file_path, index=False)

@@ -54,8 +54,7 @@ def ensure_table(host="application_postgres"):
     CREATE TABLE IF NOT EXISTS library_member (
         id INTEGER PRIMARY KEY,
         name TEXT,
-        age int,
-
+        date_of_birth TIMESTAMP,
         created_at TIMESTAMP
     );
 """
@@ -88,13 +87,13 @@ def insert_book_data(book_data, host="application_postgres"):
 
 def insert_member_data(member_data, host="application_postgres"):
     insert_data = """
-    INSERT INTO library_member (id, name, age, created_at)
+    INSERT INTO library_member (id, name, date_of_birth, created_at)
     VALUES (%s,%s,%s,%s)
 """
     
     for data in member_data:
         quick_command(insert_data, host, "5432", "application_db", "library_admin", "letsreadbook",
-                      (data['id'], data['name'], data['age'], data['created_at']))
+                      (data['id'], data['name'], data['date_of_birth'], data['created_at']))
         
         print(f"Succesfully added: {data['name']}")
 
