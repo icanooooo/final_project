@@ -8,6 +8,9 @@ postgres:
 bigquery:
   project: "purwadika"
   dataset: "ihsan_perpustakaan_final_project_3"
+  dataset_dwh_source: "dwh_ihsan_perpustakaan_source"
+  dataset_dwh: "dwh_ihsan_perpusatakaan"
+  dataset_dwh_mart: "dwh_ihsan_perpustakaan_mart"
 
 temp_storage:
   type: "local"
@@ -23,3 +26,11 @@ tables:
   - source: "rent_table"
     staging_table: "stg_rent"
     destination: "rent"
+
+source_tables:
+  - source: "books"
+    destination: "production_books_source"
+  - source: "member"
+    destination: "production_member_source"
+  - source: "rent"
+    destination: "production_rent_source"

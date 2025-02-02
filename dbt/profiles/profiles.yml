@@ -1,6 +1,17 @@
 library_dbt:
   outputs:
-    dev:
+    capstoneThree:
+      dataset: ihsan_perpustakaan_capstone_project_3
+      job_execution_timeout_seconds: 200
+      job_retries: 1
+      location: asia-southeast2
+      method: service-account
+      priority: interactive
+      project: purwadika
+      threads: 1
+      keyfile: /opt/dbt/keys/bigquery-project.json
+      type: bigquery
+    source_destination:
       dataset: ihsan_dwh_library_data_modelling
       job_execution_timeout_seconds: 200
       job_retries: 1

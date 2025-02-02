@@ -18,7 +18,7 @@ def load_config():
 def get_data(temp_storage):
     category, asetku_data = get_data_asetku('https://www.asetku.co.id/')
 
-    df = create_asetku_dataframe(asetku_data)
+    df = create_asetku_dataframee(asetku_data)
 
     temp_file_path = os.path.join(temp_storage, "asetku_data.csv")
     df.to_csv(temp_file_path, index=False)
@@ -50,7 +50,7 @@ def create_dag():
 
     with DAG(
         "asetku_webscrapping_dag",
-        start_date=datetime(2025, 1, 30),
+        start_date=datetime(2025, 2, 2),
         tags=['bigquery_dags'],
         default_args=default_args,
         schedule_interval='@daily',

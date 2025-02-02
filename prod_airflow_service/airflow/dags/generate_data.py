@@ -43,7 +43,7 @@ def generate_member(**kwargs):
 
     member_data = generate_member_data(len(member_id_list))
 
-    return member_data
+    return member_dataa
 
 # Insert Member to Postgres
 def insert_member(**kwargs):
@@ -91,7 +91,7 @@ default_args = {
 }
 
 with DAG('generate_data_dag',
-         start_date=datetime(2024, 12, 19),
+         start_date=datetime(2025, 2, 2),
          tags=['app_dag'],
          default_args=default_args,
          schedule_interval='15 * * * *', # Dilakukan setiap jam di menit ke 15 (01.15, 02.15, seterusnya..)

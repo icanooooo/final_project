@@ -106,7 +106,7 @@ def create_dag():
 
     with DAG(
         "library_postgres_db_to_bigquery",
-        start_date=datetime(2024, 12, 20),
+        start_date=datetime(2025, 2, 2),
         tags=['bigquery_dags'],
         default_args=default_args,
         schedule_interval='15 * * * *', # setiap jam dalam menit ke 15 (01.15, 02.15, seterusnya..)
