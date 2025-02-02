@@ -8,9 +8,6 @@ postgres:
 bigquery:
   project: "purwadika"
   dataset: "ihsan_perpustakaan_final_project_3"
-  dataset_dwh_source: "ihsan_dwh_perpustakaan_source"
-  dataset_dwh: "ihsan_dwh_perpusatakaan"
-  dataset_dwh_mart: "ihsan_dwh_perpustakaan_mart"
 
 temp_storage:
   type: "local"
@@ -27,10 +24,21 @@ tables:
     staging_table: "stg_rent"
     destination: "rent"
 
-source_tables:
-  - source: "books"
-    destination: "production_books_source"
-  - source: "member"
-    destination: "production_member_source"
-  - source: "rent"
-    destination: "production_rent_source"
+models:
+  source:
+    tables:
+      - name : "production_library_books_source"
+      - name : "production_library_members_source"
+      - name : "production_library_rent_transaction_source"
+    target: "source_destination"
+  fact_and_dims:
+    tables:
+      - name : "dim_books"
+      - name : "dim_genre"
+      - name : "dim_members"
+      - name : "fct_rent_transactions"
+    target: "dwh_production"
+  mart:
+    tables:
+      - name: "mart_rent_transactions"
+    target: "dwh_mart"

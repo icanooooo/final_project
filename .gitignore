@@ -4,3 +4,4 @@ airflow_db_volumes/
 __pycache__/
 testing.py
 .env
+testing/
