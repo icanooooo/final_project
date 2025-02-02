@@ -1,8 +1,12 @@
 version: 2
 
 sources:
-  - name: library_bigquery
-    schema: raw
+  - name: purwadika
+    schema: ihsan_perpustakaan_capstone_project_3
     tables:
-      - name: production_books_source
-        identifier: raw_books
+      - name: books_data
+        identifier: books
+      - name: member_data
+        identifier: member
+      - name: rent_data
+        identifier: rent
