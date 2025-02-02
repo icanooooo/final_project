@@ -41,6 +41,7 @@ Namun, karena docker network tersebut dibuat dalam file docker compose untuk `ai
 docker compose -f prod_airflow_db/docker-compose.yaml up -d
 docker compose -f prod_airflow_service/docker-compose.yaml up -d
 docker compose -f app_db/docker-compose.yaml up -d
+docker compose -f dbt/docker-compose.yaml up -d
 ```
 
 Setelah itu kita bisa membuka webserver airflow di browser dengan membuka `localhost:8080`. Di dalam web UI tersebut, karena project kita didesain untuk dijalankan setiap satu jam, kita hanya perlu mengeser tombol yang berada disebelah DAG kita.
@@ -53,6 +54,7 @@ jika ingin memberhentikan service kita berikan command:
 docker compose -f prod_airflow_service/docker-compose.yaml down
 docker compose -f app_db/docker-compose.yaml down
 docker compose -f prod_airflow_db/docker-compose.yaml down
+docker compose -f dbt/docker-compose.yaml down
 ```
 
 ## DAGs (Directed Acyclic Graphs)
