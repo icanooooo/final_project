@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+  - name: library_bigquery
+    schema: raw
+    tables:
+      - name: production_books_source
+        identifier: raw_books

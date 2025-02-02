@@ -12,7 +12,7 @@ library_dbt:
       keyfile: /opt/dbt/keys/bigquery-project.json
       type: bigquery
     source_destination:
-      dataset: ihsan_dwh_library_data_modelling
+      dataset: ihsan_dwh__perpustakaan_source
       job_execution_timeout_seconds: 200
       job_retries: 1
       location: asia-southeast2
@@ -22,4 +22,4 @@ library_dbt:
       threads: 1
       keyfile: /opt/dbt/keys/bigquery-project.json
       type: bigquery
-  target: dev
+  target: source_destination

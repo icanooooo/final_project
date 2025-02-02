@@ -8,9 +8,9 @@ postgres:
 bigquery:
   project: "purwadika"
   dataset: "ihsan_perpustakaan_final_project_3"
-  dataset_dwh_source: "dwh_ihsan_perpustakaan_source"
-  dataset_dwh: "dwh_ihsan_perpusatakaan"
-  dataset_dwh_mart: "dwh_ihsan_perpustakaan_mart"
+  dataset_dwh_source: "ihsan_dwh_perpustakaan_source"
+  dataset_dwh: "ihsan_dwh_perpusatakaan"
+  dataset_dwh_mart: "ihsan_dwh_perpustakaan_mart"
 
 temp_storage:
   type: "local"
