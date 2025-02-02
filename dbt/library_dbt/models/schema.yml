@@ -1,0 +1,53 @@
+version: 2
+
+models:
+  - name: dim_genre
+    description: "Tables showing genre count"
+    columns:
+      - name: genre
+        description: "genre name."
+      - name: genre_count
+        description: "count of genre."
+  - name: dim_books
+    description: "dimensional table containing book data for library"
+    columns:
+      - name: id
+      - name: title
+      - name: author_name
+      - name: genre
+      - name: release_year
+      - name: stock
+      - name: created_at
+  - name: dim_members
+    description: "dimensional table containing members data"
+    columns:
+      - name: id
+      - name: name
+      - name: date_of_birth
+      - name: age
+      - name: created_at
+  - name: fct_rent_transactions
+    description: "Fact table containing rent transactions"
+    # columns:
+    #   - name: id
+    #   - name: book_id
+    #   - name: member_id
+    #   - name: rent_date
+    #   - name: return_date
+    #   - name: no_rent_days
+    #   - name: created_at
+  - name: mart_rent_transactions
+    description: "Data Mart containing detailed rent transactions data"
+    # columns:
+    #   - name: id
+    #   - name: book_name
+    #   - name: book_id
+    #   - name: library_member_name
+    #   - name: library_member_id
+    #   - name: rent_date
+    #   - name: return_date
+    #   - name: no_rent_days
+    #   - name: rent_day
+    #   - name: return_day
+    #   - name: created_at
+    #   - name: data_mart_creation
