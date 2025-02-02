@@ -21,7 +21,9 @@ def generate_name():
     
 def choose_random_genre():
     genres = ['Drama', 'Science Fiction', 'Romance', 'Biography', 'Self-help', 'Japanese Manga',
-              'Psychological', 'Fantasy', 'History', 'Anti Establishement']
+              'Psychological', 'Fantasy', 'History', 'Anti Establishement', 'Action', 'Military_Fiction',
+              'Adventure', 'Comedy', 'Dark Comedy', 'Crime/Mystery', 'Cyberpunk', 'Kafkaesque',
+              'Asian Literature', 'Gothic Literature', 'Tutorial', 'Education', 'Game Guides']
     
     genre = random.choice(genres)
 
