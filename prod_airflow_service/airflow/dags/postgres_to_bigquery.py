@@ -47,7 +47,7 @@ def ingest_data(source_table, temp_storage):
     conn = create_connection("application_postgres", "5432", "application_db", "library_admin", "letsreadbook")
     yesterday = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
 
-    result, columns = print_query(conn, f"SELECT * FROM {source_table};") # WHERE created_at >= '{yesterday} 00:00:00' AND created_at <= '{yesterday} 23:59:59';") Jangan lupa untuk where h-1
+    result, columns = print_query(conn, f"SELECT * FROM {source_table} WHERE created_at >= '{yesterday} 00:00:00' AND created_at <= '{yesterday} 23:59:59';") # Jangan lupa untuk where h-1
 
     df = pd.DataFrame(result, columns=columns)
 
