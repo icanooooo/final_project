@@ -60,7 +60,17 @@ def create_dag():
             bash_command=source_cmd
         )
 
-        source_dag
+        fact_and_dim_dag = BashOperator(
+            task_id='dbt_run_fact_and_dims',
+            bash_command=fct_dims_cmd
+        )
+
+        mart_cmd = BashOperator(
+            task_id='dbt_run_mart',
+            bash_command=mart_cmd
+        )
+
+        source_dag >> fact_and_dim_dag >> mart_cmd
     
     return dag
 

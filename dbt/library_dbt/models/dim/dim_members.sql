@@ -7,7 +7,7 @@
 WITH members_dims AS (
     SELECT
         *
-    FROM {{ ref('production_library_members_source') }}
+    FROM {{ source('source', 'member_data') }}
 )
 
 SELECT

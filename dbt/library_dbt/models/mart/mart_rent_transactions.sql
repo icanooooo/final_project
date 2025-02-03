@@ -7,7 +7,7 @@
 WITH rent_transaction AS (
     SELECT
         *
-    FROM {{ ref('fct_rent_transactions') }}
+    FROM {{ source('data_models', 'rent_data') }}
 )
 
 SELECT
