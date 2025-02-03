@@ -2,7 +2,7 @@ version: 2
 
 sources:
   - name: purwadika
-    schema: ihsan_perpustakaan_final_project_3
+    schema: ihsan_perpustakaan_capstone_project_3
     tables:
       - name: books_data
         identifier: books

@@ -30,7 +30,7 @@ services:
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/dags/helper:/opt/airflow/dags/helper
       - ./airflow/dags/configs:/opt/airflow/dags/configs
-      - ./var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock
       - ./keys/:/opt/airflow/keys/
     env_file:
       - .env
@@ -54,7 +54,7 @@ services:
       - ./airflow/dags:/opt/airflow/dags
       - ./airflow/dags/helper:/opt/airflow/dags/helper
       - ./airflow/dags/configs:/opt/airflow/dags/configs
-      - ./var/run/docker.sock:/var/run/docker.sock
+      - /var/run/docker.sock:/var/run/docker.sock
       - ./keys/:/opt/airflow/keys/
     env_file:
       - .env
