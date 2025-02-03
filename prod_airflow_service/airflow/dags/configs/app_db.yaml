@@ -31,11 +31,14 @@ models:
       - name : "production_library_members_source"
       - name : "production_library_rent_transaction_source"
     target: "source_destination"
-  fact_and_dims:
+  dims:
     tables:
       - name : "dim_books"
       - name : "dim_genre"
       - name : "dim_members"
+    target: "dwh_production"
+  facts:
+    tables:
       - name : "fct_rent_transactions"
     target: "dwh_production"
   mart:

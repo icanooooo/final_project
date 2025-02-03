@@ -1,5 +1,4 @@
 from airflow import DAG
-from airflow.providers.docker.operators.docker import DockerOperator
 from airflow.operators.bash import BashOperator
 from datetime import datetime, timedelta
 from helper.alert_helper import send_failure_to_discord
@@ -30,15 +29,13 @@ def get_commands(config):
 
         commands.append(cmd)
         
-    sources = commands[0]
-    fct_dims = commands[1]
-    mart = commands[2]
+    sources, dims, facts, mart = commands[:4]
 
-    return sources, fct_dims, mart
+    return sources, dims, facts, mart
 
 def create_dag():
     config=load_config()
-    source_cmd, fct_dims_cmd, mart_cmd = get_commands(config)
+    source_cmd, dims_cmd, facts_cmd, mart_cmd = get_commands(config)
 
     default_args = {
         'owner' : 'ican',
@@ -59,10 +56,15 @@ def create_dag():
             task_id='dbt_run_src',
             bash_command=source_cmd
         )
+         
+        dims_dag = BashOperator(
+            task_id='dbt_run_dim',
+            bash_command=dims_cmd
+        )
 
-        fact_and_dim_dag = BashOperator(
-            task_id='dbt_run_fact_and_dims',
-            bash_command=fct_dims_cmd
+        facts_dag = BashOperator(
+            task_id='dbt_run_fact',
+            bash_command=facts_cmd
         )
 
         mart_cmd = BashOperator(
@@ -70,7 +72,7 @@ def create_dag():
             bash_command=mart_cmd
         )
 
-        source_dag >> fact_and_dim_dag >> mart_cmd
+        source_dag >> [dims_dag, facts_dag] >> mart_cmd
     
     return dag
 
