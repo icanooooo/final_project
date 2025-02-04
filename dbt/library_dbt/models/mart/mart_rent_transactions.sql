@@ -58,8 +58,8 @@ SELECT
     created_at
 FROM joint_all
 {% if is_incremental() %}
-    WHERE created_at > (
-        SELECT MAX(created_at)
+    WHERE updated_at > (
+        SELECT MAX(updated_at)
         FROM {{ this }}
     )
 {% endif %}

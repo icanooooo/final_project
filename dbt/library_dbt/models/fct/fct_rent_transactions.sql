@@ -20,8 +20,8 @@ SELECT
     date_diff(return_date, rent_date, DAY) as no_rent_days,
 FROM rent_transaction
 {% if is_incremental() %}
-    WHERE created_at > (
-        SELECT MAX(created_at)
+    WHERE updated_at > (
+        SELECT MAX(updated_at)
         FROM {{ this }}
     )
 {% endif %}

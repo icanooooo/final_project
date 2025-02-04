@@ -47,7 +47,7 @@ def create_dag():
     with DAG(
         "dbt_modelling_dag",
         start_date=datetime(2025, 2, 2),
-        tags=['nigquery_dags', 'dbt_dags'],
+        tags=['bigquery_dags', 'dbt_dags'],
         default_args=default_args,
         schedule_interval='@daily',
         catchup=False) as dag:

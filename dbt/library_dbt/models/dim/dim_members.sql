@@ -20,8 +20,8 @@ SELECT
     DATE_DIFF(CURRENT_DATE(), date_of_birth, year) AS age
 FROM members_dims
 {% if is_incremental() %}
-    WHERE created_at > (
-        SELECT MAX(created_at)
+    WHERE updated_at > (
+        SELECT MAX(updated_at)
         FROM {{ this }}
     )
 {% endif %}
