@@ -49,7 +49,8 @@ def generate_member_data(last_id_number): #Menerima hanya int
         user_data['name'] = generate_name()
         user_data['date_of_birth'] = get_birthday()
         user_data['created_at'] = datetime.now(ZoneInfo('Asia/Jakarta')).strftime('%Y-%m-%d %H:%M:%S')
-    
+        user_data['updated_at'] = user_data['created_at']
+
         data.append(user_data)
 
     return data
@@ -72,6 +73,7 @@ def generate_book_data(last_id_number): # Hanya menerima int
             data['release_year'] = response_data['first_publish_year']
             data['stock'] = random.randint(10, 20)
             data['created_at'] = datetime.now(ZoneInfo('Asia/Jakarta')).strftime('%Y-%m-%d %H:%M:%S')
+            data['updated_at'] = data['created_at']
 
             all_books.append(data)
 
@@ -101,7 +103,7 @@ def generate_rent_data(book_id_list, member_id_list, last_id_number): # Hanya me
         data['rent_date'] = rent_day.strftime('%Y-%m-%d %H:%M:%S')
         data['return_date'] = return_day.strftime('%Y-%m-%d %H:%M:%S')
         data['created_at'] = datetime.now(ZoneInfo('Asia/Jakarta')).strftime('%Y-%m-%d %H:%M:%S')
-
+        data['updated_at'] = data['created_at']
 
         rent_data.append(data)
 

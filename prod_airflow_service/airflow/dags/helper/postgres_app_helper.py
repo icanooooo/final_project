@@ -45,7 +45,8 @@ def ensure_table(host="application_postgres"):
         genre TEXT,
         release_year INT,
         stock INTEGER,
-        created_at TIMESTAMP
+        created_at TIMESTAMP,
+        updated_at TIMESTAMP
     );
 """
     quick_command(ensure_table_query, host, "5432", "application_db", "library_admin", "letsreadbook")
@@ -55,7 +56,8 @@ def ensure_table(host="application_postgres"):
         id INTEGER PRIMARY KEY,
         name TEXT,
         date_of_birth TIMESTAMP,
-        created_at TIMESTAMP
+        created_at TIMESTAMP,
+        updated_at TIMESTAMP
     );
 """
     quick_command(ensure_table_query, host, "5432", "application_db", "library_admin", "letsreadbook")
@@ -67,7 +69,8 @@ def ensure_table(host="application_postgres"):
         library_member_id INTEGER,
         rent_date TIMESTAMP,
         return_date TIMESTAMP,
-        created_at TIMESTAMP
+        created_at TIMESTAMP,
+        updated_at TIMESTAMP
     );
 """
     quick_command(ensure_table_query, host, "5432", "application_db", "library_admin", "letsreadbook")
@@ -75,37 +78,38 @@ def ensure_table(host="application_postgres"):
 
 def insert_book_data(book_data, host="application_postgres"):
     insert_data = """
-    INSERT INTO books_table (id, title, author_name, genre, release_year, stock, created_at)
-    VALUES (%s,%s,%s,%s,%s,%s,%s)
+    INSERT INTO books_table (id, title, author_name, genre, release_year, stock, created_at, updated_at)
+    VALUES (%s,%s,%s,%s,%s,%s,%s,%s)
 """
     
     for data in book_data:
         quick_command(insert_data, host, "5432", "application_db", "library_admin", "letsreadbook",
-                      (data['id'], data['title'], data['author_name'], data['genre'], data['release_year'], data['stock'], data['created_at']))
+                      (data['id'], data['title'], data['author_name'], data['genre'], data['release_year'],
+                       data['stock'], data['created_at'], data['updated_at']))
         
         print(f"Succesfully added: {data['title']}")
 
 def insert_member_data(member_data, host="application_postgres"):
     insert_data = """
-    INSERT INTO library_member (id, name, date_of_birth, created_at)
-    VALUES (%s,%s,%s,%s)
+    INSERT INTO library_member (id, name, date_of_birth, created_at, updated_at)
+    VALUES (%s,%s,%s,%s,%s)
 """
     
     for data in member_data:
         quick_command(insert_data, host, "5432", "application_db", "library_admin", "letsreadbook",
-                      (data['id'], data['name'], data['date_of_birth'], data['created_at']))
+                      (data['id'], data['name'], data['date_of_birth'], data['created_at'], data['updated_at']))
         
         print(f"Succesfully added: {data['name']}")
 
 def insert_rent_data(rent_data, host="application_postgres"):
     insert_data = """
-    INSERT INTO rent_table (id, book_id, library_member_id, rent_date, return_date, created_at)
-    VALUES (%s,%s,%s,%s,%s,%s)
+    INSERT INTO rent_table (id, book_id, library_member_id, rent_date, return_date, created_at, updated_at)
+    VALUES (%s,%s,%s,%s,%s,%s,%s)
 """
     
     for data in rent_data:
         quick_command(insert_data, host, "5432", "application_db", "library_admin", "letsreadbook",
-                      (data['id'], data['book_id'], data['library_member_id'], data['rent_date'], data['return_date'], data['created_at']))
+                      (data['id'], data['book_id'], data['library_member_id'], data['rent_date'], data['return_date'], data['created_at'], data['updated_at']))
         
         print(f"Succesfully added rent id: {data['id']}")
 

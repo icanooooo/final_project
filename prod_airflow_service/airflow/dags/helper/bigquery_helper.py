@@ -111,7 +111,7 @@ def drop_table(client, table_id):
 
 def get_last_updated(client, table_id):
     query = f"""
-        SELECT MAX(created_at) AS last_updated
+        SELECT MAX(updated_at) AS last_updated
         FROM `{table_id}`
     """
 
@@ -133,7 +133,7 @@ def incremental_load(client, dataframe, table_id, mode, partition_field=None):
 
     last_updated_timestamp = get_last_updated(client, table_id)
 
-    incremental_df = dataframe[dataframe['created_at'] > last_updated_timestamp]
+    incremental_df = dataframe[dataframe['updated_at'] > last_updated_timestamp]
 
     job_config = bigquery.LoadJobConfig(
         schema = create_schema(incremental_df),

@@ -4,7 +4,7 @@ def automatically_change_dtypes(dataframe):
     columns = dataframe.columns
 
     for col in columns:
-        if col == 'created_at':
+        if col == 'created_at' or col == 'updated_at':
             continue
 
         try:

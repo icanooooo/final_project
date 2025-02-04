@@ -47,7 +47,7 @@ def ingest_data(source_table, temp_storage):
     conn = create_connection("application_postgres", "5432", "application_db", "library_admin", "letsreadbook")
     yesterday = (datetime.now() - timedelta(days=1)).strftime("%Y-%m-%d")
 
-    result, columns = print_query(conn, f"SELECT * FROM {source_table} WHERE created_at >= '{yesterday} 00:00:00' AND created_at <= '{yesterday} 23:59:59';") # Jangan lupa untuk where h-1
+    result, columns = print_query(conn, f"SELECT * FROM {source_table};") # WHERE created_at >= '{yesterday} 00:00:00' AND created_at <= '{yesterday} 23:59:59';") # Jangan lupa untuk where h-1
 
     df = pd.DataFrame(result, columns=columns)
 
@@ -66,6 +66,9 @@ def load_stg_table(source_table, temp_storage, project_id, dataset_id, destinati
     dataframe['created_at'] = pd.to_datetime(dataframe['created_at']) # ini jangan UTC Pastiin
     dataframe['created_at'] = dataframe['created_at'].dt.tz_localize(None) 
 
+    dataframe['updated_at'] = pd.to_datetime(dataframe['updated_at']) # ini jangan UTC Pastiin
+    dataframe['updated_at'] = dataframe['updated_at'].dt.tz_localize(None) 
+
     dataframe = automatically_change_dtypes(dataframe)
 
     table_id = f"{project_id}.{dataset_id}.{destination}"
@@ -81,6 +84,9 @@ def upsert_table(temp_storage, source_table, project_id, dataset_id, stage_id, d
     dataframe = pd.read_csv(f"{temp_storage}/{source_table}.csv")
     dataframe['created_at'] = pd.to_datetime(dataframe['created_at']) # ini jangan UTC Pastiin
     dataframe['created_at'] = dataframe['created_at'].dt.tz_localize(None)
+
+    dataframe['updated_at'] = pd.to_datetime(dataframe['updated_at']) # ini jangan UTC Pastiin
+    dataframe['updated_at'] = dataframe['updated_at'].dt.tz_localize(None)
 
     dataframe = automatically_change_dtypes(dataframe)
 
