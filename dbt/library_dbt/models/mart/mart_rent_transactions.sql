@@ -13,11 +13,48 @@ WITH rent_transaction AS (
     SELECT
         *
     FROM {{ source('data_models', 'rent_data') }}
+),
+books AS (
+    SELECT
+        *
+    FROM {{ source('data_models', 'books_data') }}
+),
+members AS (
+    SELECT
+        *
+    FROM {{ source('data_models', 'member_data')}}
+),
+joint_rent_books AS (
+    SELECT
+        r.*,
+        b.title as book_title,
+        b.genre
+    FROM rent_transaction AS r
+    INNER JOIN books AS b
+    ON r.book_id = b.id
+),
+joint_all AS (
+    SELECT
+        jrb.*,
+        m.name AS renter_name,
+        m.age AS renter_age
+    FROM joint_rent_books as jrb
+    INNER JOIN members as m
+    ON jrb.library_member_id = m.id
 )
 
 SELECT
-    *
-FROM rent_transaction
+    id,
+    book_id,
+    book_title,
+    library_member_id AS renter_id,
+    renter_name,
+    renter_age,
+    rent_date,
+    return_date,
+    no_rent_days,
+    created_at
+FROM joint_all
 {% if is_incremental() %}
     WHERE created_at > (
         SELECT MAX(created_at)
