@@ -45,10 +45,9 @@ models:
       - name: renter_id
       - name: renter_name
       - name: renter_age
+      - name: rent_day
+      - name: return_day
       - name: rent_date
       - name: return_date
       - name: no_rent_days
-      # - name: rent_day
-      # - name: return_day
       - name: created_at
-    #   - name: data_mart_creation

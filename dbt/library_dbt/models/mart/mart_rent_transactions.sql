@@ -50,6 +50,8 @@ SELECT
     library_member_id AS renter_id,
     renter_name,
     renter_age,
+    FORMAT_DATE('%A', rent_date) AS rent_day,
+    FORMAT_DATE('%A', return_date) AS return_day,
     rent_date,
     return_date,
     no_rent_days,
