@@ -28,14 +28,14 @@ models:
       - name: created_at
   - name: fct_rent_transactions
     description: "Fact table containing rent transactions"
-    # columns:
-    #   - name: id
-    #   - name: book_id
-    #   - name: member_id
-    #   - name: rent_date
-    #   - name: return_date
-    #   - name: no_rent_days
-    #   - name: created_at
+    columns:
+      - name: id
+      - name: book_id
+      - name: member_id
+      - name: rent_date
+      - name: return_date
+      - name: created_at
+      - name: no_rent_days
   - name: mart_rent_transactions
     description: "Data Mart containing detailed rent transactions data"
     # columns:

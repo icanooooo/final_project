@@ -45,7 +45,7 @@ def create_dag():
         'on_failure_callback' : send_failure_to_discord,
     }
     config = load_config()
-    table_id = config["bigquery"]["project"] + "." + config["bigquery"]["dataset"] + "." + "ihsan_webscrape"
+    table_id = config["bigquery"]["project"] + "." + config["bigquery"]["dataset"] + "." + "asetku_webscrape"
     temp_storage = config["temp_storage"]["location"]
 
     with DAG(
