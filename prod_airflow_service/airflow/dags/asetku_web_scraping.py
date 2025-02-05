@@ -30,14 +30,10 @@ def input_to_bigquery_table(table_id, temp_storage):
 
     dataframe = automatically_change_dtypes(dataframe)
 
-    try:
-        create_table(client, table_id, create_schema(dataframe))
-    except:
-        print("Table already exist")
+    dataframe['created_at'] = pd.to_datetime(dataframe['created_at']) # ini jangan UTC Pastiin
+    dataframe['created_at'] = dataframe['created_at'].dt.tz_localize(None) 
 
-    load_bigquery(client, dataframe, table_id, "WRITE_APPEND")
-
-    incremental_load(client, dataframe, table_id, "WRITE_APPEND", "created_at")
+    load_bigquery(client, dataframe, table_id, "WRITE_APPEND", "created_at")
 
 def create_dag():
     default_args = {
@@ -80,9 +76,3 @@ def create_dag():
     return dag
 
 dag = create_dag()
-
-
-    
-
-
-

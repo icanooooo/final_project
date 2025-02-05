@@ -73,7 +73,7 @@ def load_stg_table(source_table, temp_storage, project_id, dataset_id, destinati
 
     table_id = f"{project_id}.{dataset_id}.{destination}"
 
-    incremental_load(client, dataframe, table_id, "WRITE_APPEND", "created_at")
+    incremental_load(client, dataframe, table_id, "WRITE_APPEND", "created_at", "created_at")
 
     print(f"loaded {dataframe.shape[0]} row to {destination}")
 

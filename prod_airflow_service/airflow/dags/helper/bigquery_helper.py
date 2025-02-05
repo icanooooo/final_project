@@ -109,9 +109,9 @@ def drop_table(client, table_id):
 
     print(f"Deleted table `{table_id}`.")
 
-def get_last_updated(client, table_id):
+def get_last_updated(client, table_id, incremental_field):
     query = f"""
-        SELECT MAX(updated_at) AS last_updated
+        SELECT MAX({incremental_field}) AS last_updated
         FROM `{table_id}`
     """
 
@@ -127,13 +127,13 @@ def get_last_updated(client, table_id):
 
     return last_updated_timestamp
 
-def incremental_load(client, dataframe, table_id, mode, partition_field=None):
+def incremental_load(client, dataframe, table_id, mode, incremental_field="updated_at",partition_field=None):
     # Akan print table already exist jika ada
     create_table(client, table_id, create_schema(dataframe), partition_field)
 
-    last_updated_timestamp = get_last_updated(client, table_id)
+    last_updated_timestamp = get_last_updated(client, table_id, incremental_field)
 
-    incremental_df = dataframe[dataframe['updated_at'] > last_updated_timestamp]
+    incremental_df = dataframe[dataframe[incremental_field] > last_updated_timestamp]
 
     job_config = bigquery.LoadJobConfig(
         schema = create_schema(incremental_df),

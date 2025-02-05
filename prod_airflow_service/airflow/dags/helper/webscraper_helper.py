@@ -57,7 +57,7 @@ def create_asetku_dataframe(data):
               "total_fund_accumulated",
               "total_cur_year_fund_accumulated",
               "current_active_fund_accumulated",
-              "input_time_jkt"]
+              "created_at"]
     
     df = pd.DataFrame([data], columns=header)
 
