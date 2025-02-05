@@ -58,7 +58,12 @@ docker compose -f app_db/docker-compose.yaml up -d
 docker compose -f dbt/docker-compose.yaml up -d
 ```
 
-Setelah itu kita bisa membuka webserver airflow di browser dengan membuka `localhost:8080`. Di dalam web UI tersebut, karena project kita didesain untuk dijalankan setiap satu jam, kita hanya perlu mengeser tombol yang berada disebelah DAG kita.
+Setelah itu kita bisa membuka webserver airflow di browser dengan membuka `localhost:8080`. Ketika membuka UI kita akan diminta user and password yang bisa kita isi dengan info dibawah:
+
+user: airflow
+password: airflow
+
+Di dalam web UI tersebut, karena project kita didesain untuk dijalankan setiap satu jam, kita hanya perlu mengeser tombol yang berada disebelah DAG kita.
 
 <img src='assets/dag_button.png' alt='database design' width='35%'>
 
@@ -150,12 +155,36 @@ dbt menggunakan kueri sql sebagai template model dan Jinja yang bisa membantu ku
 
 *Source tables* merupakan tabel yang biasa diambil dari luar sistem kita kedalam data warehouse yang dipilih. Tabel ini biasanya tidak di transform terlebih dahulu, menyediakan data sebagai *raw* untuk ditransformasi di tabel yang lain. 
 
-Dalam project ini, kita menggunakan dataset dan tabel yang berada di final project kita sebagai source untuk source table kita. Karena source table merupakan raw, kita akan membiarkan adanya duplikasi didalam tabel tersebut, tanpa dibuat menjadi *incremental table*
+Dalam project ini, kita menggunakan dataset dan tabel yang berada di final project kita sebagai source untuk *source table* kita. Karena *source table* merupakan raw, kita akan membiarkan adanya duplikasi didalam tabel tersebut, tanpa dibuat menjadi *incremental table*. Hal ini dilakukan untuk memastikan tidak ada data yang hilang dan karena tidak digunakan untuk end user, hal ini tidak akan menganggu proses analisis.
 
 #### Fact and Dimensional Tables
 
+Fact dan dimensional table merupakan tabel yang sudah ditransformasi dan dibersihkan. Tabel tersebut seharusnya sudah dalam data type yang sesuai dan tidak memiliki data duplikat (oleh karena itu di buat menjadi incremental table).
 
+Facts table merupakan tabel yang menyimpan data terukur dan memiliki *foreign key* kepada dimensional tables. Tabel ini menyimpan data numerikal yang bisa dianalisis dan diagregasi.
+
+Dimensional table adalah tabel yang menyimpan data yang memiliki atribut deskriptif. Membantu untuk mengkategorisasi, filter, dan *grouping* terhadap *fact tables* untuk kebutuhan analisis.
 
 #### Datamarts
 
-#### Airflow Implementation
+*Datamarts* adalah tabel yang dibentuk untuk kebutuhan analisis tertentu (business group or department) menggunakan data yang didapatkan dari *fact* dan *dimensional tables*.
+
+#### Airflow-dbt Implementation
+
+*gambar dag airflow-dbt*
+
+Dalam project ini, untuk menggunakan dbt dalam airflow, kita menggunakan docker compose yang berada directory berbeda dengan Airflow. Kita membentuk docker-compose dengan menggunakan Dockerfile custom untuk instalasi `dbt-core` dan `dbt-bigquery`. Kita juga harus meletakan folder project untuk dbt dalam directory yang sama.
+
+`library_dbt` sebagai directory yang menyimpan project dbt kita, `profiles` sebagai directory yang menyimpan profile dbt kita, dan `logs` untuk menyimpan file logging untuk proses dbt. Kita juga membuat folder `keys` yang menyimpan file service-account.json untuk koneksi dengan BigQUery. 
+
+Setelah kita sukses instalasi dbt dengan docker, kita lalu bisa mengkoneksikan airflow dengannya. Hal ini kita lakukan dengan cara memastikan airflow memiliki akses terhadap docker kita. Hal ini dilakukan dengan cara mounting docker.sock kita ke dalam volume (isi di volume docker compose: `/var/run/docker.sock:/var/run/docker.sock`).
+
+Jika sudah terkoneksi kita bisa langsung menggunakan *BashOperator* untuk memberikan command kepada service dbt kita. Setiap task untuk dag ini menggunakan template berikut:
+
+```
+docker exec dbt-dbt-1 dbt run --select {model} --target {target dataset} --profiles-dir {directory profile dbt} --project-dir {director project dbt}
+```
+
+Dengan menggunakan file `app_db.yml` sebagai config, kita bisa membuat commandnya secara dinamis. Ketika membuat model baru, kita tidak memerlukan untuk merubah commandnya, hanya perlu menambahkan ke dalam file config kita.
+
+Setelah itu kita akan buat 4 task dalam dag ini untuk masing jenis tabel (`dbt_run_src`,`dbt_run_dim`,`dbt_run_fact`, `dbt_run_mart`) dengan setiap task menjalankan BashOperator untuk command masing-masing.
