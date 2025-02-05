@@ -121,7 +121,7 @@ Seperti yang kita lihat diatas setiap table diproses dengan template task yang s
 
 Penggunaan staging table dengan final/production table membantu untuk memastikan bahwa final table sudah siap digunakan dan segala pemrosesan yang belum selesai dilakukan di staging table.
 
-### (3) DAG Failed Alert (Final Project Update)
+## DAG Failed Alert (Final Project Update)
 
 *contoh gambar failure messsage di discord*
 
@@ -133,7 +133,7 @@ Fungsi yang dibuat akan mengambil informasi dari context (*failure* di DAG) lalu
 
 *kegunaan business case*
 
-### (4) Web Scrapping for Asetku Website (Final Project Update)
+## Web Scrapping for Asetku Website (Final Project Update)
 
 Untuk melakukan webscraping, kita menggunakan kedua BeautifulSoup untuk parsing html dari halaman yang kita tari dan Selenium untuk menggunakan Webdriver browser kita agar berperan seakan data yang diambil melalui browser.
 
@@ -143,7 +143,7 @@ Pertama kita load halaman menggunakan `webdriver.Chrome` dari library `selenium.
 
 *gambar asetku disini*
 
-### (5) dbt-Airflow Implementation (Final Project Update)
+## dbt-Airflow Implementation (Final Project Update)
 
 #### What is dbt?
 
