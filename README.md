@@ -2,8 +2,14 @@
 
 Repository ini adalah hasil kerja saya untuk tugas Capstone Project ke-3 Kelas Data Engineering Purwadhika. Secara garis besar saya diminta untuk membuat data pipeline yang mengutilisasi Airflow sebagai *orchestrator* terhadap dua DAG (Directed Acyclic Graph). Kedua DAG tersebut bertujuan untuk:
 
+Project ini bertujuan untuk kebutuhan Final Project untuk kelas Data Engineering Purwadhika Digital School. Untuk menyelesaikan final project ini, kita diminta untuk melanjutkan capstone project 3 kita untuk men-develop Airflow Dags on-failure alert ke dalam discord, melakukan webscraping & memasukkannya ke dalam bigquery, dan terakhir mendevelop dbt untuk transformasi data lalu mengimplementasinya kedalam airflow. Project ini bersikan 4 DAG yait:
+
 1. Generasi *dummy data* dan menyimpannya dalam suatu database (PostgreSQL)
 2. melakukan ingestion data tersebut dari database ke Google BigQuery.
+3. Menjalankan dbt untuk transformasi data didalam BigQuery memindahkannya ke masing-masing dataset. **[Final Project]**
+4. Melakukan webscraping kepada website asetku.com dan menyimpannya didalam BigQuery. **[Final Project]**
+
+Seluruh DAGs diatas juga menggunakan fungsi yang mengirimkan detail error ke discord jika DAG yang dijalankan gagal. **[Final Project]**
 
 Graph dibawah dapat dilihat sebagai gambaran umum project dari ini.
 
@@ -11,13 +17,17 @@ Graph dibawah dapat dilihat sebagai gambaran umum project dari ini.
 
 ## Overview
 
-Dalam project, kita diminta membuat Kedua DAG tersebut dalam suatu studi kasus. Studi kasus yang saya pilih adalah sistem data pipeline untuk suatu perpustakaan yang menyimpan data Buku (Books), anggota (Member), dan sewa (Rent). 
+Dalam project, kita diminta membuat seleruh DAG terhadap dalam suatu studi kasus. Studi kasus yang saya pilih adalah sistem data pipeline untuk suatu perpustakaan yang menyimpan data Buku (Books), anggota (Member), dan sewa (Rent). 
 
 Penggunaan airflow adalah untuk orkestrasi *task* dalam suatu satuan waktu yang dapat di otomatisasi. Dalam kasus ini, kita akan mengambil data dari database perpustakaan (yang kita akan generate dummy data seakan database operasional) dan memasukkannya kedalam BigQuery. *Task* tersebut kita akan desain untuk berjalan setiap jam pada menit 15, membantu menghilangkan perlunya laporan manual dari tim operasi dan data didapatkan secara cepat tanpa perlu menunggu anggota tim lain.
 
 Google BigQuery merupakan suatu Data Warehouse, tempat dimana data disimpan untuk kebutuhan analisis. Pemisahan penyimpanan data antara operasional dan analisis ini akan berguna agar proses analisis tidak bisa menganggu proses operasional yang berjalan sangat dinamis. BigQuery juga dioptimisasi untuk kebutuhan analisis dari bagaimana service tersebut melakukan Storage dan Pricing agar lebih cost and time efficient.
 
-Project ini menggambarkan proses pipeline dari source (database perpustakaan) ke cloud data warehouse (Google BigQuery) untuk persiapan analisis. Penggunaan analisis pun bisa bermacam-macam, contohnya dalam use-case perpustakaan untuk table `rent` kita bisa melihat buku apa saja yang paling sering dipinjam sehingga perlu penambahan stok ataupun penulis siapa saja yang memiliki sewa terbanyak sehingga bisa memberikan insight komersil.
+dbt adalah suatu tool yang digunakan untuk transfomasi data yang biasanya sudah berada didalam data warehouse, atau lebih sering disebut dengan ELT process berperan sebagai 'T' dalam proses tersebut. Tools ini menggunakan file SQL sebagai dasar untuk proses transformasi dan bisa menggunakan Jinja, suatu *templating language*, untuk membuat kueri SQL menjadi dinamis dan modular. dbt seringkali digunakan oleh para *Analytics Engineer* untuk menyediakan data yang siap digunakan oleh end-users.
+
+Project ini, pada tahapan pertama akan menggenerasi *dummy* data yang lalu akan di ingest ke BigQuery. Setelah itu, menggunakan dbt untuk transformasi data tersebut didalam BigQuery agar lebih siap digunakan. Proses Data Modelling terdapat 3 tahap yaitu membuat (1) source tables, (2) Fact and Dimensional tables, dan (3) Data Marts yang bertujuan untuk memenuhi kebutuhan reporting/analisis tertentu.
+
+kita juga melakukan webscrapping yang dijalankan oleh DAG menggunakan dua tools yaitu BeautifulSoup untuk parsing HTML dan selenium untuk berinteraksi dengan halaman web dengan menggunakan WebDriver. Webscraping adalah suatu teknik dimana kita mengambil informasi melalui halaman web tertentu.
 
 ### Tools
 
@@ -26,6 +36,10 @@ Project ini menggambarkan proses pipeline dari source (database perpustakaan) ke
 - PostgreSQL
 - Pandas
 - Google BigQuery
+- dbt
+- BeautifulSoup
+- Selenium
+
 
 ## Cara Menggunakan
 
@@ -65,7 +79,6 @@ Dalam DAG pertama kita, kita diminta untuk generate database dengan schema seper
 
 <img src='assets/database_design.png' alt='database design' width='50%'>
 
-
 Masing-masing tabel memiliki *primary key* masing-masing yang menjadi *foreign key* didalam table *rent_table*. *primary key* juga berurutan, memudahkan kita untuk menggunakan *primary key* terakhir untuk menggenerasi *primary key* selanjutnya.
 
 <img src='assets/generate_data_dag.png' alt='generate_data_dag' width='90%'>
@@ -103,17 +116,45 @@ Seperti yang kita lihat diatas setiap table diproses dengan template task yang s
 
 Penggunaan staging table dengan final/production table membantu untuk memastikan bahwa final table sudah siap digunakan dan segala pemrosesan yang belum selesai dilakukan di staging table.
 
-#### DAG Failed Alert (Final Project Update)
+### (3) DAG Failed Alert (Final Project Update)
 
-### (3) Web Scrapping for Asetku Website (Final Project Update)
+*contoh gambar failure messsage di discord*
 
-### (4) dbt-Airflow Implementation (Final Project Update)
+Disini kita membuat fungsi untuk memberikan suatu pesan menuju Discord Server kita apabila suatu DAG menghadapi suatu failure. Untuk mengirimkan pesan melalui discord, kita pertama harus membuat webhook untuk di discord sebagai 'akun' yang akan mengirimkan pesan.
+
+Setelah membuat webhook, kita mengambil urlnya dan menggunakan library `requests` dan method `post` untuk mengirimkan pesan.
+
+Fungsi yang dibuat akan mengambil informasi dari context (*failure* di DAG) lalu mengambil nama, task, dan exception (Error message) dari task dan DAG yang *failed*.
+
+*kegunaan business case*
+
+### (4) Web Scrapping for Asetku Website (Final Project Update)
+
+Untuk melakukan webscraping, kita menggunakan kedua BeautifulSoup untuk parsing html dari halaman yang kita tari dan Selenium untuk menggunakan Webdriver browser kita agar berperan seakan data yang diambil melalui browser.
+
+Kita harus mengambil data menggunakan Selenium karena halaman yang kita ambil menggunakan Javascript untuk menyediakan datanya secara dinamis melainkan menuliskannya di html polos. 
+
+Pertama kita load halaman menggunakan `webdriver.Chrome` dari library `selenium. Lalu kita parsing html `page_source` dari halaman yang kita ambil menggunakan BeautifulSoup. Kita akan ambil seluruh `div` tag dengan class `name` dan `amount` didalam `div` tag yang berada didalam class `content-row-1`. Berikut dibawah gambar yang kita akan ambil datanya melalui webscrapping melalui website [asetku](https://www.asetku.co.id/).
+
+*gambar asetku disini*
+
+### (5) dbt-Airflow Implementation (Final Project Update)
 
 #### What is dbt?
 
+dbt adalaj suatu tool yang digunakan untuk transformasi data yang bisa digunakan didalam proses ELT, dimana data di*load* terlebih dahulu sebelum di transformasi. 
+
+dbt menggunakan kueri sql sebagai template model dan Jinja yang bisa membantu kueri bisa digunakan kembali dan menjadi dinamis.
+
 #### Source Tables
 
+*Source tables* merupakan tabel yang biasa diambil dari luar sistem kita kedalam data warehouse yang dipilih. Tabel ini biasanya tidak di transform terlebih dahulu, menyediakan data sebagai *raw* untuk ditransformasi di tabel yang lain. 
+
+Dalam project ini, kita menggunakan dataset dan tabel yang berada di final project kita sebagai source untuk source table kita. Karena source table merupakan raw, kita akan membiarkan adanya duplikasi didalam tabel tersebut, tanpa dibuat menjadi *incremental table*
+
 #### Fact and Dimensional Tables
+
+
 
 #### Datamarts
 
