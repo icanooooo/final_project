@@ -1,5 +1,5 @@
 from helper.webscraper_helper import get_data_asetku, create_asetku_dataframe
-from helper.bigquery_helper import load_bigquery, create_schema, create_table, create_client, create_dataset
+from helper.bigquery_helper import load_bigquery, create_schema, create_table, create_client, create_dataset, incremental_load
 from helper.pandas_helper import automatically_change_dtypes
 from helper.alert_helper import send_failure_to_discord
 from datetime import timedelta, datetime
@@ -36,6 +36,8 @@ def input_to_bigquery_table(table_id, temp_storage):
         print("Table already exist")
 
     load_bigquery(client, dataframe, table_id, "WRITE_APPEND")
+
+    incremental_load(client, dataframe, table_id, "WRITE_APPEND", "created_at")
 
 def create_dag():
     default_args = {
