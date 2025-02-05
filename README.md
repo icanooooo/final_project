@@ -102,3 +102,19 @@ Seperti yang kita lihat diatas setiap table diproses dengan template task yang s
 #### Upsert Table
 
 Penggunaan staging table dengan final/production table membantu untuk memastikan bahwa final table sudah siap digunakan dan segala pemrosesan yang belum selesai dilakukan di staging table.
+
+#### DAG Failed Alert (Final Project Update)
+
+### (3) Web Scrapping for Asetku Website (Final Project Update)
+
+### (4) dbt-Airflow Implementation (Final Project Update)
+
+#### What is dbt?
+
+#### Source Tables
+
+#### Fact and Dimensional Tables
+
+#### Datamarts
+
+#### Airflow Implementation
