@@ -2,6 +2,7 @@ from airflow import DAG
 from airflow.operators.bash import BashOperator
 from datetime import datetime, timedelta
 from helper.alert_helper import send_failure_to_discord
+from airflow.utils.task_group import TaskGroup
 
 import yaml
 
@@ -31,6 +32,8 @@ def get_commands(config):
         
     sources, dims, facts, mart = commands[:4]
 
+
+
     return sources, dims, facts, mart
 
 def create_dag():
@@ -52,27 +55,35 @@ def create_dag():
         schedule_interval='@daily',
         catchup=False) as dag:
 
-        source_dag = BashOperator(
-            task_id='dbt_run_src',
-            bash_command=source_cmd
-        )
-         
-        dims_dag = BashOperator(
-            task_id='dbt_run_dim',
-            bash_command=dims_cmd
+        with TaskGroup("models", dag=dag) as models:
+            source_task = BashOperator(
+                task_id='dbt_run_src',
+                bash_command=source_cmd
+            )
+            
+            dims_task = BashOperator(
+                task_id='dbt_run_dim',
+                bash_command=dims_cmd
+            )
+
+            facts_task = BashOperator(
+                task_id='dbt_run_fact',
+                bash_command=facts_cmd
+            )
+
+            mart_cmd = BashOperator(
+                task_id='dbt_run_mart',
+                bash_command=mart_cmd
+            )
+            
+            source_task >> [dims_task, facts_task] >> mart_cmd
+
+        snapshot_task = BashOperator(
+            task_id='dbt_snapshots',
+            bash_command='docker exec dbt-dbt-1 dbt snapshot --project-dir library_dbt'
         )
 
-        facts_dag = BashOperator(
-            task_id='dbt_run_fact',
-            bash_command=facts_cmd
-        )
-
-        mart_cmd = BashOperator(
-            task_id='dbt_run_mart',
-            bash_command=mart_cmd
-        )
-
-        source_dag >> [dims_dag, facts_dag] >> mart_cmd
+        models >> snapshot_task
     
     return dag
 
