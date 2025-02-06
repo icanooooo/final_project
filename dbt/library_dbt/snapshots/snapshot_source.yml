@@ -1,0 +1,52 @@
+snapshots:
+  - name: snapshots_src_books
+    description: "Snapshot tables showing all books data including its changes"
+    config:
+      unique_key: id
+      strategy: timestamp
+      updated_at: model_updated_at
+    columns:
+      - name: model_updated_at
+        description: "timestamp of model updated at (in UTC)"
+      - name: dbt_scd_id
+        description: "Unique id of each row regardless of updated or not"
+      - name: dbt_updated_at
+        description: "time of updating from dbt (in UTC)"
+      - name: dbt_valid_from
+        description: "validty from of row (in UTC)"
+      - name: dbt_valid_to
+        description: "validty to of row (in UTC)"
+  - name: snapshots_src_members
+    description: "Snapshot tables showing all members data including its changes"
+    config:
+      unique_key: id
+      strategy: timestamp
+      updated_at: model_updated_at
+    columns:
+      - name: model_updated_at
+        description: "timestamp of model updated at (in UTC)"
+      - name: dbt_scd_id
+        description: "Unique id of each row regardless of updated or not"
+      - name: dbt_updated_at
+        description: "time of updating from dbt (in UTC)"
+      - name: dbt_valid_from
+        description: "validty from of row (in UTC)"
+      - name: dbt_valid_to
+        description: "validty to of row (in UTC)"
+  - name: snapshots_src_rent_transactions
+    description: "Snapshot tables showing all rent_transactions data including its changes"
+    config:
+      unique_key: id
+      strategy: timestamp
+      updated_at: model_updated_at
+    columns:
+      - name: model_updated_at
+        description: "timestamp of model updated at (in UTC)"
+      - name: dbt_scd_id
+        description: "Unique id of each row regardless of updated or not"
+      - name: dbt_updated_at
+        description: "time of updating from dbt (in UTC)"
+      - name: dbt_valid_from
+        description: "validty from of row (in UTC)"
+      - name: dbt_valid_to
+        description: "validty to of row (in UTC)"
