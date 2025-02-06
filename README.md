@@ -155,7 +155,7 @@ dbt menggunakan kueri sql sebagai template model dan Jinja yang bisa membantu ku
 
 *Source tables* merupakan tabel yang biasa diambil dari luar sistem kita kedalam data warehouse yang dipilih. Tabel ini biasanya tidak di transform terlebih dahulu, menyediakan data sebagai *raw* untuk ditransformasi di tabel yang lain. 
 
-Dalam project ini, kita menggunakan dataset dan tabel yang berada di final project kita sebagai source untuk *source table* kita. Karena *source table* merupakan raw, kita akan membiarkan adanya duplikasi didalam tabel tersebut, tanpa dibuat menjadi *incremental table*. Hal ini dilakukan untuk memastikan tidak ada data yang hilang dan karena tidak digunakan untuk end user, hal ini tidak akan menganggu proses analisis.
+Dalam project ini, kita menggunakan dataset dan tabel yang berada di final project kita sebagai source untuk *source table* kita. 
 
 #### Fact and Dimensional Tables
 
@@ -168,6 +168,14 @@ Dimensional table adalah tabel yang menyimpan data yang memiliki atribut deskrip
 #### Datamarts
 
 *Datamarts* adalah tabel yang dibentuk untuk kebutuhan analisis tertentu (business group or department) menggunakan data yang didapatkan dari *fact* dan *dimensional tables*.
+
+#### Snapshots
+
+*snapshot* adalah cara untuk *tracking* perubahan data dengan menyimpan historical version data tersebut. Hal ini diimplementasikan dengan **type 2 SCD**, dimana perubahan disimpan dan diinfokan melalui kolom tambahan.
+
+Dengan memisahkan tabel *snapshots* dengan tujuan tracking tersendiri, proses analisis tidak dapat terganggu jika kita ingat melihat version history data kita. 
+
+Untuk memastikan data yang dimasukan kedalam data model kita adalah yang terupdate, kita pastika tabel kita merupakan incremental table dengan menggunakan kolom `updated_at` sebagai panduan. 
 
 #### Airflow-dbt Implementation
 
