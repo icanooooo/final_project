@@ -44,3 +44,4 @@ library_dbt:
       threads: 1
       keyfile: /opt/dbt/keys/bigquery-project.json
       type: bigquery
+  target: dwh_production
