@@ -75,7 +75,7 @@ docker compose -f prod_airflow_db/docker-compose.yaml down
 ## DAG Failed Alert (Final Project Update)
 
 
-<img src='assets/discord-airflow-failed.png' alt='discord airflow failure message' width='75%'>
+<img src='assets/discord-airflow-failed.png' alt='discord airflow failure message'>
 
 Disini kita membuat fungsi untuk memberikan suatu pesan menuju Discord Server kita apabila suatu DAG menghadapi suatu failure. Untuk mengirimkan pesan melalui discord, kita pertama harus membuat webhook untuk di discord sebagai 'akun' yang akan mengirimkan pesan.
 
@@ -93,7 +93,7 @@ Kita harus mengambil data menggunakan Selenium karena halaman yang kita ambil me
 
 Pertama kita load halaman menggunakan `webdriver.Chrome` dari library `selenium. Lalu kita parsing html `page_source` dari halaman yang kita ambil menggunakan BeautifulSoup. Kita akan ambil seluruh `div` tag dengan class `name` dan `amount` didalam `div` tag yang berada didalam class `content-row-1`. Berikut dibawah gambar yang kita akan ambil datanya melalui webscrapping melalui website [asetku](https://www.asetku.co.id/).
 
-<img src='assets/asetku_sc.png' alt='asetku webscrapped data' width='75%'>
+<img src='assets/asetku_sc.png' alt='asetku webscrapped data'>
 
 ## dbt-Airflow Implementation (Final Project Update)
 
