@@ -1,10 +1,12 @@
 # Final Project Data Engineering Bootcamp Purwadhika
 
+<img src='assets/final_project_model.png' alt='final project model'>
+
 Repository ini bertujuan untuk menyelesaikan Final Project untuk kelas Data Engineering Purwadhika. Final Project ini melanjutkan dari Capstone Project 3, dimana kita diminta untuk menggenarasi data untuk suatu studi kasus (library untuk studi kasus pilihan saya) dan membuat pipeline ke Google BigQuery.
 
 Untuk Final Project, kita akan melanjutkannya dalam 3 hal:
 
-1. Membuat alert yang dikirimkan ke discord jika terjadi *failure* terhadap task.
+1. Membuat alert yang dikirimkan ke discord jika terjadi *failure* terhadap task. Diimplementasikan ke setiap DAGs/Tasks
 2. Membuat *preparation layer, Dim & Fact Tables, and Datamarts* menggunakan Data Build Tool (dbt).
 3. Membuat web-scraping terhadap suatu website (pilihan saya: [Asetku](https://www.asetku.co.id/)) dan memasukannya kedalam Google BigQuery.
 
