@@ -1,31 +1,16 @@
 # Final Project Data Engineering Bootcamp Purwadhika
 
-Repository ini adalah hasil kerja saya untuk tugas Capstone Project ke-3 Kelas Data Engineering Purwadhika. Secara garis besar saya diminta untuk membuat data pipeline yang mengutilisasi Airflow sebagai *orchestrator* terhadap dua DAG (Directed Acyclic Graph). Kedua DAG tersebut bertujuan untuk:
+Repository ini bertujuan untuk menyelesaikan Final Project untuk kelas Data Engineering Purwadhika. Final Project ini melanjutkan dari Capstone Project 3, dimana kita diminta untuk menggenarasi data untuk suatu studi kasus (library untuk studi kasus pilihan saya) dan membuat pipeline ke Google BigQuery.
 
-Project ini bertujuan untuk kebutuhan Final Project untuk kelas Data Engineering Purwadhika Digital School. Untuk menyelesaikan final project ini, kita diminta untuk melanjutkan capstone project 3 kita untuk men-develop Airflow Dags on-failure alert ke dalam discord, melakukan webscraping & memasukkannya ke dalam bigquery, dan terakhir mendevelop dbt untuk transformasi data lalu mengimplementasinya kedalam airflow. Project ini bersikan 4 DAG yait:
+Untuk Final Project, kita akan melanjutkannya dalam 3 hal:
 
-1. Generasi *dummy data* dan menyimpannya dalam suatu database (PostgreSQL)
-2. melakukan ingestion data tersebut dari database ke Google BigQuery.
-3. Menjalankan dbt untuk transformasi data didalam BigQuery memindahkannya ke masing-masing dataset. **[Final Project]**
-4. Melakukan webscraping kepada website asetku.com dan menyimpannya didalam BigQuery. **[Final Project]**
+1. Membuat alert yang dikirimkan ke discord jika terjadi *failure* terhadap task.
+2. Membuat *preparation layer, Dim & Fact Tables, and Datamarts* menggunakan Data Build Tool (dbt).
+3. Membuat web-scraping terhadap suatu website (pilihan saya: [Asetku](https://www.asetku.co.id/)) dan memasukannya kedalam Google BigQuery.
 
-Seluruh DAGs diatas juga menggunakan fungsi yang mengirimkan detail error ke discord jika DAG yang dijalankan gagal. **[Final Project]**
-
-Graph dibawah dapat dilihat sebagai gambaran umum project dari ini.
-
-<img src='assets/project_graph.png' alt='project graph' width='50%'>
-
-## Overview
-
-Dalam project, kita diminta membuat seleruh DAG terhadap dalam suatu studi kasus. Studi kasus yang saya pilih adalah sistem data pipeline untuk suatu perpustakaan yang menyimpan data Buku (Books), anggota (Member), dan sewa (Rent). 
-
-Penggunaan airflow adalah untuk orkestrasi *task* dalam suatu satuan waktu yang dapat di otomatisasi. Dalam kasus ini, kita akan mengambil data dari database perpustakaan (yang kita akan generate dummy data seakan database operasional) dan memasukkannya kedalam BigQuery. *Task* tersebut kita akan desain untuk berjalan setiap jam pada menit 15, membantu menghilangkan perlunya laporan manual dari tim operasi dan data didapatkan secara cepat tanpa perlu menunggu anggota tim lain.
-
-Google BigQuery merupakan suatu Data Warehouse, tempat dimana data disimpan untuk kebutuhan analisis. Pemisahan penyimpanan data antara operasional dan analisis ini akan berguna agar proses analisis tidak bisa menganggu proses operasional yang berjalan sangat dinamis. BigQuery juga dioptimisasi untuk kebutuhan analisis dari bagaimana service tersebut melakukan Storage dan Pricing agar lebih cost and time efficient.
+Untuk mengirimkan *failure message* ke discord, kita akan menggunakan *webhook* yang menyediakan url yang bisa kita lakukan melakukan method *post* dari library *requests* untuk mengirimkan pesan.
 
 dbt adalah suatu tool yang digunakan untuk transfomasi data yang biasanya sudah berada didalam data warehouse, atau lebih sering disebut dengan ELT process berperan sebagai 'T' dalam proses tersebut. Tools ini menggunakan file SQL sebagai dasar untuk proses transformasi dan bisa menggunakan Jinja, suatu *templating language*, untuk membuat kueri SQL menjadi dinamis dan modular. dbt seringkali digunakan oleh para *Analytics Engineer* untuk menyediakan data yang siap digunakan oleh end-users.
-
-Project ini, pada tahapan pertama akan menggenerasi *dummy* data yang lalu akan di ingest ke BigQuery. Setelah itu, menggunakan dbt untuk transformasi data tersebut didalam BigQuery agar lebih siap digunakan. Proses Data Modelling terdapat 3 tahap yaitu membuat (1) source tables, (2) Fact and Dimensional tables, dan (3) Data Marts yang bertujuan untuk memenuhi kebutuhan reporting/analisis tertentu.
 
 kita juga melakukan webscrapping yang dijalankan oleh DAG menggunakan dua tools yaitu BeautifulSoup untuk parsing HTML dan selenium untuk berinteraksi dengan halaman web dengan menggunakan WebDriver. Webscraping adalah suatu teknik dimana kita mengambil informasi melalui halaman web tertentu.
 
@@ -43,13 +28,18 @@ kita juga melakukan webscrapping yang dijalankan oleh DAG menggunakan dua tools 
 
 ## Cara Menggunakan
 
-Untuk menjalankan project ini, kita menggunakan docker. Dalam project ini, kita menggunakan 5 services yaitu 2 PostgreSQL database yaitu `application_db` dan `airflow_db`. `application_db` untuk menyimpan secara lokal geneasi data kita dan `airflow_db` untuk menyimpan metadata Airflow. Lalu kita menggunakan 3 services Airflow yaitu, `init_airflow` untuk meng*intialize* airflow, `webserver` yang menghost webUI airflow untuk kita berinteraksi dengan airflow, dan `scheduler` yang menjalankan orkestrasi yang telah didesain.
+Untuk menjalankan project ini, kita menggunakan 4 service yaitu:
 
-Sebelum menjalankan kita juga harus memastikan bahwa port local yang kita gunakan 5432 sedang tidak dipakai. Jika masih dipakai maka service app_db tidak akan berjalan. Jika memang port 5432 tidak bisa dimatikan kita bisa mengubahnya menjadi local port lain, namun jangan diubah untuk container portnya (e.g. 5433:5432, port kedua jangan diubah) karena tetap bisa berjalan dan sudah sesuai dengan DAG script.
+1. prod_airflow_db : Menyimpan metadata airflow.
+2. prod_airflow_service : Initialize Airflow dan meng-*host* scheduler dan webserver airflow (menggunaka port 8080).
+3. dbt : Instalasi dbt-core dan dbt-bigquery.
+4. app_db : Menyimpan data PostgresSQL untuk generated data. (Menggunakan port 5432)
 
-Satu hal yang diperhatikan adalah penggunaan docker network. Docker network dibentuk dalam file docker-compose bersama `airflow_db` Dengan menggunakan network, hal tersebut memudahkan komunikasi antar container. Kita hanya perlu menggunakan nama service sebagai *host* dan menggunakan container port yang kita tuliskan didalam file `docker-compose.yaml`. Hal ini juga meningkatkan security, karena seluruh komunikasi antar service dilakukan dalam suatu internal network, hal ini membantu kita untuk mengawasi dan mengatur external access dengan lebih mudah.
+Untuk komunikasi 4 service ini, kita akan menggunakan docker network `application-network` yang terbentuk oleh service prod_airflow_db. Untuk itu kita harus menjalankan service tersebut lebih dulu agar antar service bis berkomunikasi.'
 
-Namun, karena docker network tersebut dibuat dalam file docker compose untuk `airflow_db`, maka kita harus menjalankan docker compose tersebut terlebih dahulu agar network dipersiapkan sebelum digunakan container lain. Hal itu dapat dilakukan dengan menjalankan command dibawah di directory project ini.
+Menggunakan docker network membantu untuk menjaga mengawasi karena komunikasi antar service akan ter*contain* dalam satu network. Semua komunikasi yang berada diluar network tersebut dapat lebih mudah diawasi dan dimaintain.
+
+Untuk menjalankan dockernnya, kita bisa menjalankan `docker compose up` dalam tiap directory service tersebut atau bisa jalankan command dibawah:
 
 ```
 docker compose -f prod_airflow_db/docker-compose.yaml up -d
@@ -57,6 +47,8 @@ docker compose -f prod_airflow_service/docker-compose.yaml up -d
 docker compose -f app_db/docker-compose.yaml up -d
 docker compose -f dbt/docker-compose.yaml up -d
 ```
+
+Jika menggunakan windows (Windows Powershell or Command Prompt) dan tidak bisa jalan bisa coba dijalankan dengan mengganti `/` dengan '\',
 
 Setelah itu kita bisa membuka webserver airflow di browser dengan membuka `localhost:8080`. Ketika membuka UI kita akan diminta user and password yang bisa kita isi dengan info dibawah:
 
@@ -76,54 +68,9 @@ docker compose -f dbt/docker-compose.yaml down
 docker compose -f prod_airflow_db/docker-compose.yaml down
 ```
 
-## DAGs (Directed Acyclic Graphs)
-
-### (1) Create data and insert to PostgreSQL
-
-Dalam DAG pertama kita, kita diminta untuk generate database dengan schema seperti:
-
-<img src='assets/database_design.png' alt='database design' width='50%'>
-
-Masing-masing tabel memiliki *primary key* masing-masing yang menjadi *foreign key* didalam table *rent_table*. *primary key* juga berurutan, memudahkan kita untuk menggunakan *primary key* terakhir untuk menggenerasi *primary key* selanjutnya.
-
-<img src='assets/generate_data_dag.png' alt='generate_data_dag' width='90%'>
-
-#### Get ID list
-Dari gambar diatas, kita dapat melihat bahwa sebelum kita generate data, kita akan mengambil id list dari masing-masing tabel di PostgreSQL (akan menjadi 0 pada generate pertama), hal ini dilakukan untuk memastikan meng-generate id baru.
-
-#### Generate Data
-Cara untuk menggenerate data tersebut adalah dengan menggunakan API random name generator untuk nama member dan OpenLibrary untuk Judul Buku.
-
-Lalu setelah itu kita menjalankan secara bersamaan generate data pada tabel `books_table` dan `library_member`. Hal ini dilakukan terlebih dahulu, karena untuk generate data pada `rent_data` kita akan mengambil id dari dua tabel sebelumnya dan dipilih secara random.
-
-#### Insert to PostgreSQL
-setelah semua data di generate, kita akan masing-masing insert datanya kedalam PostgreSQL dengan menggunakan *library* psycopg2 melalui helper file `postgres_app_helper`.
-
-### (2) PostgreSQL to BigQuery
-
-Dalam DAG ini, kita diminta untuk melakukan ingestion dari data yang telah kita generate sebelumnya ke Google BigQuery.
-
-<img src='assets/postgres_to_bigquery_dag.png' alt='postgres_to_bigquery_dag' width='80%'>
-
-Proses dari DAG ini didahulukan dengan menggunakan task `check_dataset` yang akan mememeriksa apakah dataset sudah tersedia pada BigQuery target. Tergantung hasil return dari *check_dataset*, jika `True` maka `create_dataset` task akan menjalankan pembuatan dataset. Bila hasil return `False` , maka task `create_dataset` akan di skip sebagaimana graph diatas.
-
-#### Trigger Rule
-
-Karena task sebelumnya di skip, kita harus memastikan `trigger_rule` untuk task selanjutnya. Karena secara *default* `trigger_rule` yang digunakan adalah `all_success`, yang memastikan bahwa task sebelumnya harus berhasil berjalan. Kita akan mengubah value `trigger_rule` dalam task selanjutanya menjadi `none_failed`, karena dalam kasus ini task sebelumnya di skip namun tidak *failed*.
-
-#### YAML file for dynamic DAGs
-
-Dalam membuat DAG ini, kita menggunakan yaml file sebagai configuration file yang menyimpan detail informasi tabel kita. Penggunaan file yaml membantu karena ini dapat digunakan untuk *dynamic dag*, menggunakan template untuk beberapa table yang berada di configuration file.
-
-Seperti yang kita lihat diatas setiap table diproses dengan template task yang sama. (1) kita melakukan ingestion dari PostgreSQL dengan library pandas dan menyimpannya sebagai csv dalam temporary storage kita, (2) kita melakukan load staging table dengan menggunakan Google Cloud Python API secara incremental, dan (3) kita melakukan upsert ke final table kita secara incremental.
-
-#### Upsert Table
-
-Penggunaan staging table dengan final/production table membantu untuk memastikan bahwa final table sudah siap digunakan dan segala pemrosesan yang belum selesai dilakukan di staging table.
-
 ## DAG Failed Alert (Final Project Update)
 
-*contoh gambar failure messsage di discord*
+<img src='assets/discord-airflow-failed.png' alt='discord airflow failure message' width='50%'>
 
 Disini kita membuat fungsi untuk memberikan suatu pesan menuju Discord Server kita apabila suatu DAG menghadapi suatu failure. Untuk mengirimkan pesan melalui discord, kita pertama harus membuat webhook untuk di discord sebagai 'akun' yang akan mengirimkan pesan.
 
@@ -131,7 +78,7 @@ Setelah membuat webhook, kita mengambil urlnya dan menggunakan library `requests
 
 Fungsi yang dibuat akan mengambil informasi dari context (*failure* di DAG) lalu mengambil nama, task, dan exception (Error message) dari task dan DAG yang *failed*.
 
-*kegunaan business case*
+Secara business process, kegunaan *failed alert* ini dapat membantu kita untuk lebih mudah mengawasi jalannya DAG kita. Setelah airflow digunakan untuk ***Production*** terkadang bisa saja ada kegagalan yang terjadi karena terdapat masalah yang tidak dikembangkan/perhitungkan saat development. Oleh itu kita bisa menggunakan Alert untuk mengawasi *Airflow* tanpa harus membuka UI Airflow setiap saat.
 
 ## Web Scrapping for Asetku Website (Final Project Update)
 
@@ -141,7 +88,7 @@ Kita harus mengambil data menggunakan Selenium karena halaman yang kita ambil me
 
 Pertama kita load halaman menggunakan `webdriver.Chrome` dari library `selenium. Lalu kita parsing html `page_source` dari halaman yang kita ambil menggunakan BeautifulSoup. Kita akan ambil seluruh `div` tag dengan class `name` dan `amount` didalam `div` tag yang berada didalam class `content-row-1`. Berikut dibawah gambar yang kita akan ambil datanya melalui webscrapping melalui website [asetku](https://www.asetku.co.id/).
 
-*gambar asetku disini*
+<img src='assets/asetku_sc.png' alt='asetku webscrapped data' width='35%'>
 
 ## dbt-Airflow Implementation (Final Project Update)
 
@@ -179,7 +126,8 @@ Untuk memastikan data yang dimasukan kedalam data model kita adalah yang terupda
 
 #### Airflow-dbt Implementation
 
-*gambar dag airflow-dbt*
+<img src='assets/dag_airflow_dbt.png' alt='dag airflow dbt'>
+
 
 Dalam project ini, untuk menggunakan dbt dalam airflow, kita menggunakan docker compose yang berada directory berbeda dengan Airflow. Kita membentuk docker-compose dengan menggunakan Dockerfile custom untuk instalasi `dbt-core` dan `dbt-bigquery`. Kita juga harus meletakan folder project untuk dbt dalam directory yang sama.
 
