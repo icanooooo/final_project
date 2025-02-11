@@ -103,6 +103,8 @@ dbt adalaj suatu tool yang digunakan untuk transformasi data yang bisa digunakan
 
 dbt menggunakan kueri sql sebagai template model dan Jinja yang bisa membantu kueri bisa digunakan kembali dan menjadi dinamis.
 
+<img src='assets/dbt_linneage_path.png' alt='dbt model graph'>
+
 #### Source Tables
 
 *Source tables* merupakan tabel yang biasa diambil dari luar sistem kita kedalam data warehouse yang dipilih. Tabel ini biasanya tidak di transform terlebih dahulu, menyediakan data sebagai *raw* untuk ditransformasi di tabel yang lain. 
@@ -143,7 +145,7 @@ Setelah kita sukses instalasi dbt dengan docker, kita lalu bisa mengkoneksikan a
 Jika sudah terkoneksi kita bisa langsung menggunakan *BashOperator* untuk memberikan command kepada service dbt kita. Setiap task untuk dag ini menggunakan template berikut:
 
 ```
-docker exec dbt-dbt-1 dbt run --select {model} --target {target dataset} --profiles-dir {directory profile dbt} --project-dir {director project dbt}
+docker exec dbt-dbt-1 dbt run --select {model} --profiles-dir {directory profile dbt} --project-dir {director project dbt}
 ```
 
 Dengan menggunakan file `app_db.yml` sebagai config, kita bisa membuat commandnya secara dinamis. Ketika membuat model baru, kita tidak memerlukan untuk merubah commandnya, hanya perlu menambahkan ke dalam file config kita.

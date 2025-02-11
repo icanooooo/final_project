@@ -10,23 +10,3 @@ sources:
         identifier: member
       - name: rent_data
         identifier: rent
-  - name: source
-    schema: ihsan_dwh_perpustakaan_source
-    tables:
-      - name: books_data
-        identifier: production_library_books_source
-      - name: member_data
-        identifier: production_library_members_source
-      - name: rent_data
-        identifier: production_library_rent_transaction_source
-  - name: data_models
-    schema: ihsan_dwh_perpustakaan_production
-    tables:
-      - name: genre
-        identifier: dim_genre
-      - name: books_data
-        identifier: dim_books
-      - name: member_data
-        identifier: dim_members
-      - name: rent_data
-        identifier: fct_rent_transactions
