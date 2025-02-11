@@ -37,6 +37,14 @@ models:
     # Config indicated by + and applies to all files under models/example/
     example:
       +materialized: view
+    src:
+      +schema: ihsan_dwh_perpustakaan_source
+    dim:
+      +schema: ihsan_dwh_perpustakaan_production
+    facts:
+      +schema: ihsan_dwh_perpustakaan_production
+    mart:
+      +schema: ihsan_dwh_perpustakaan_mart
 
 snapshots:
   library_dbt:

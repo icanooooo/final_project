@@ -12,7 +12,7 @@
 WITH books_dims AS (
     SELECT
         *
-    FROM {{ source('source', 'books_data') }}
+    FROM {{ ref('production_library_books_source') }}
 )
 
 SELECT

@@ -12,17 +12,17 @@
 WITH rent_transaction AS (
     SELECT
         *
-    FROM {{ source('data_models', 'rent_data') }}
+    FROM {{ ref('fct_rent_transactions') }}
 ),
 books AS (
     SELECT
         *
-    FROM {{ source('data_models', 'books_data') }}
+    FROM {{ ref('dim_books') }}
 ),
 members AS (
     SELECT
         *
-    FROM {{ source('data_models', 'member_data')}}
+    FROM {{ ref('dim_members')}}
 ),
 joint_rent_books AS (
     SELECT

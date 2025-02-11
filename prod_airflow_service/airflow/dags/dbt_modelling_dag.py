@@ -24,7 +24,7 @@ def get_commands(config):
         for table in config['models'][name]['tables']:
             models += table['name'] + " "
 
-        cmd = opening_command + models + middle_command + config['models'][name]['target'] + closing_command
+        cmd = opening_command + models + closing_command
 
         cmd = "docker exec dbt-dbt-1 " + cmd + " --project-dir library_dbt"
 

@@ -12,7 +12,7 @@
 WITH rent_transaction AS (
     SELECT
         *
-    FROM {{ source('source', 'rent_data') }}
+    FROM {{ ref('production_library_rent_transaction_source') }}
 )
 
 SELECT
