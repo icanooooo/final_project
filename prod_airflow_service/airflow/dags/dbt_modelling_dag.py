@@ -8,7 +8,6 @@ import yaml
 
 
 opening_command = "dbt run --select "
-middle_command = "--target "
 closing_command = " --profiles-dir profiles"
 
 def load_config():
