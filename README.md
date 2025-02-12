@@ -105,11 +105,25 @@ dbt menggunakan kueri sql sebagai template model dan Jinja yang bisa membantu ku
 
 <img src='assets/dbt_linneage_path.png' alt='dbt model graph'>
 
-#### Source Tables
+#### Source
 
-*Source tables* merupakan tabel yang biasa diambil dari luar sistem kita kedalam data warehouse yang dipilih. Tabel ini biasanya tidak di transform terlebih dahulu, menyediakan data sebagai *raw* untuk ditransformasi di tabel yang lain. 
+*Source* merupakan sumber data yang akan kita ambil untuk membuat model kita. Source didefinisikan sebagai dalam dbt untuk mengidentifikasi sumber data yang berasal dari luar project dbt. Kita akan menggunakan berikut dibawah sebagai *source* kita:
 
-Dalam project ini, kita menggunakan dataset dan tabel yang berada di final project kita sebagai source untuk *source table* kita. 
+- `books`
+- `member`
+- `rent`
+
+Ketiganya berasal dari dataset `ihsan_perpustakaan_final_project`.
+
+#### Source Tables (Preperation Layer)
+
+*Source tables* atau *Preperation Layer* merupakan tabel yang biasa diambil dari *source* kita kedalam data warehouse yang dipilih. Tabel ini biasanya tidak di transform terlebih dahulu, menyediakan data sebagai *raw* untuk ditransformasi di tabel yang lain. Berikut merupakan tabel *source tables/preperation layer* kita:
+
+- `production_library_books_source`
+- `production_library_members_source`
+- `production_library_rent_transaction_source`
+
+Kita akan menggunakan dataset `ihsan_dwh_perpustakaan_source`.
 
 #### Fact and Dimensional Tables
 
@@ -119,9 +133,24 @@ Facts table merupakan tabel yang menyimpan data terukur dan memiliki *foreign ke
 
 Dimensional table adalah tabel yang menyimpan data yang memiliki atribut deskriptif. Membantu untuk mengkategorisasi, filter, dan *grouping* terhadap *fact tables* untuk kebutuhan analisis.
 
+*Facts & Dimensional Table* kita terdiri dari:
+
+- `dim_genre`
+- `dim_books`
+- `dim_members`
+- `fct_rent_transactions`
+
+Tabel kita akan disimpan didalam dataset `ihsan_dwh_perpustakaan_production`.
+
 #### Datamarts
 
 *Datamarts* adalah tabel yang dibentuk untuk kebutuhan analisis tertentu (business group or department) menggunakan data yang didapatkan dari *fact* dan *dimensional tables*.
+
+Datamart kita bernama berikut:
+
+- `mart_rent_transactions`
+
+*Datamarts* kita akan disimpan didalam dataset `ihsan_dwh_perpustakaan_mart`.
 
 #### Snapshots
 
@@ -130,6 +159,14 @@ Dimensional table adalah tabel yang menyimpan data yang memiliki atribut deskrip
 Dengan memisahkan tabel *snapshots* dengan tujuan tracking tersendiri, proses analisis tidak dapat terganggu jika kita ingat melihat version history data kita. 
 
 Untuk memastikan data yang dimasukan kedalam data model kita adalah yang terupdate, kita pastika tabel kita merupakan incremental table dengan menggunakan kolom `updated_at` sebagai panduan. 
+
+*Snapshot* kita mengambil dari *source tables* terdiri dari 3 tabel yaitu:
+
+- `snapshots_src_books`
+- `snapshots_src_members`
+- `snapshots_src_rent_transactions`
+
+*Snapshots* akan disimpan dalam dataset `ihsan_dwh_perpustakaan_snapshots`.
 
 #### Airflow-dbt Implementation
 
