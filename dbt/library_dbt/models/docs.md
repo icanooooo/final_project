@@ -9,9 +9,9 @@ Source merupakan sumber data yang akan kita ambil untuk membuat model kita. Sour
 
 Ketiganya berasal dari dataset `ihsan_perpustakaan_final_project`.
 
-### Source Tables (Preperation Layer)
-*Source tables* atau *Preperation Layer* merupakan tabel yang biasa diambil dari *source* kita kedalam data warehouse yang dipilih. Tabel ini biasanya tidak di transform terlebih dahulu, menyediakan data sebagai *raw* untuk ditransformasi di tabel yang lain. 
-Dalam project ini, kita menggunakan dataset dan tabel yang berada di final project kita sebagai source untuk *source table* kita. Berikut merupakan tabel *source tables/preperation layer* kita:
+### Source Tables (Preparation Layer)
+*Source tables* atau *Preparation Layer* merupakan tabel yang biasa diambil dari *source* kita kedalam data warehouse yang dipilih. Tabel ini biasanya tidak di transform terlebih dahulu, menyediakan data sebagai *raw* untuk ditransformasi di tabel yang lain. 
+Dalam project ini, kita menggunakan dataset dan tabel yang berada di final project kita sebagai source untuk *source table* kita. Berikut merupakan tabel *source tables/preparation layer* kita:
 - `production_library_books_source`
 - `production_library_members_source`
 - `production_library_rent_transaction_source`

@@ -115,9 +115,9 @@ dbt menggunakan kueri sql sebagai template model dan Jinja yang bisa membantu ku
 
 Ketiganya berasal dari dataset `ihsan_perpustakaan_final_project`.
 
-#### Source Tables (Preperation Layer)
+#### Source Tables (Preparation Layer)
 
-*Source tables* atau *Preperation Layer* merupakan tabel yang biasa diambil dari *source* kita kedalam data warehouse yang dipilih. Tabel ini biasanya tidak di transform terlebih dahulu, menyediakan data sebagai *raw* untuk ditransformasi di tabel yang lain. Berikut merupakan tabel *source tables/preperation layer* kita:
+*Source tables* atau *Preparation Layer* merupakan tabel yang biasa diambil dari *source* kita kedalam data warehouse yang dipilih. Tabel ini biasanya tidak di transform terlebih dahulu, menyediakan data sebagai *raw* untuk ditransformasi di tabel yang lain. Berikut merupakan tabel *source tables/preparation layer* kita:
 
 - `production_library_books_source`
 - `production_library_members_source`
