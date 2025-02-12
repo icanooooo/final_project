@@ -51,7 +51,7 @@ def create_dag():
         start_date=datetime(2025, 2, 2),
         tags=['bigquery_dags', 'dbt_dags'],
         default_args=default_args,
-        schedule_interval='@daily',
+        schedule_interval='15 * * * *', # setiap jam dalam menit ke 15 (01.15, 02.15, seterusnya..)
         catchup=False) as dag:
 
         with TaskGroup("models", dag=dag) as models:
