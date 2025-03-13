@@ -1,6 +1,7 @@
 import requests
+import webhook
 
-webhook_url = "https://discord.com/api/webhooks/1334369568818462774/CtBoUn1u-rjRhO1B0BEp3NZAoRwkyXMYB-j9UwaQgFWY7t4HLrTvE90UdF3yj7aEvHPL"
+webhook_url = webhook
 
 def send_failure_to_discord(context):
     task_instance = context.get('task_instance')
