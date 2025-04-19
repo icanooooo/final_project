@@ -14,8 +14,6 @@ To orchestrate these processes, I used **Apache Airflow**, which manages workflo
 
 For containerization, I leveraged **Docker**, which allows all necessary services and applications to run consistently across environments. Docker **networks** were used to ensure seamless communication between services.
 
----
-
 ## 🛠 Tools & Technologies
 
 - **Docker** – for containerization and environment consistency  
@@ -25,8 +23,6 @@ For containerization, I leveraged **Docker**, which allows all necessary service
 - **dbt** – for data transformation and modeling  
 - **Selenium** – for dynamic web scraping  
 - **BeautifulSoup** – for parsing static web content
-
-## Airflow and Docker 
 
 ## Airflow and Docker
 
@@ -67,7 +63,7 @@ While in production, the Airflow webserver runs continuously. However, for testi
 docker compose -f prod_airflow_service/docker-compose.yaml down
 docker compose -f app_db/docker-compose.yaml down
 docker compose -f dbt/docker-compose.yaml down
-docker compose -f prod_airflow_db/docker-compose.yaml do
+docker compose -f prod_airflow_db/docker-compose.yaml down
 ```
 
 ## Local PostgreSQL to BigQuery data pipeline
