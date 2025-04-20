@@ -68,7 +68,21 @@ docker compose -f prod_airflow_db/docker-compose.yaml down
 
 ## Local PostgreSQL to BigQuery data pipeline
 
+I created the dummy data using randomuser.me (for users data) and openlibrary (Books Data) APIs. The datasets consist of user data, book data, and rent data, simulating a use case of a public library. The database choosen for this project is **PostgreSQL** as it's a reliable and well documented, often used by companies.
 
+The data pipeline developed aims to simulate a process of ingesting data from an OLTP database, designed for real-time transactions in production, to an **OLAP** database, that is **intended for analytical use**.
+
+The OLAP database or **Data Warehouse** I decided to use is BigQuery, provided by Google Cloud Platform. To interact with BigQuery using our script, we need a service account key. To get that, the process is mainly straightforward:
+
+- Create a service account in the **Service Account** section of the **IAM & Admin** page.
+- Grant permissions of which cloud service we want to give acess to. (In this case **"BigQuery Admin"** or "BigQuery Data Editor")
+- Create and download the Key, in the **Keys Tab**.
+
+After we got our key, the next step is to use it to interact with our Bigquery Python Client library installed using pip.
+
+The ingestion process are in three steps: **(1)** We first ingest it from the PostgreSQL database and store it in a temporary CSV file, **(2)** then we ensure the dataset is created in BigQuery (or creating it if it doesn't exist), and **(3)** lastly ingest the data from the temporary file and ingest it incrementally to our staging tables.
+
+Lastly, we use upsert (using `MERGE` query on the latest data) to ingest data the production tables. Ensuring in Analytics production there is no duplicate data found.
 
 ## dbt for Data Transformations
 ## Web scraping using Selenium and BeautifulSoup
