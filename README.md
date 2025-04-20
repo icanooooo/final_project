@@ -96,4 +96,10 @@ To use dbt in Docker, my method is to use a **custom Dockerfile** installing `db
 
 This in result, helps us to give commands to directly to our dbt containers. Utilizing the `BashOperator` to give `dbt run` commands to each specific tasks (source tables, fact & dim tables, and datamarts).
 
-## Web scraping using Selenium and BeautifulSoup
+## Web Scraping Using Selenium and BeautifulSoup
+
+In this process, we are tasked with **web scraping public data** from a financial lender company, Asetku. To do this, we utilize two libraries: **Selenium** and **BeautifulSoup**.
+
+**Selenium** is an open-source tool primarily used for automating web browsers. It is often used by quality assurance engineers to automate testing of web applications. In this case, we use Selenium because the web page we want to scrape loads data dynamically using JavaScript. Therefore, we use Selenium to act as a web browser, waiting until the page is fully loaded.
+
+We then use **BeautifulSoup** to parse the HTML page we ingested and find the specific data we need to scrape. BeautifulSoup helps us locate the correct HTML tags containing the desired data.
