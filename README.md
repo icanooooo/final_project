@@ -67,5 +67,8 @@ docker compose -f prod_airflow_db/docker-compose.yaml down
 ```
 
 ## Local PostgreSQL to BigQuery data pipeline
+
+
+
 ## dbt for Data Transformations
 ## Web scraping using Selenium and BeautifulSoup
