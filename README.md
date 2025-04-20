@@ -75,14 +75,25 @@ The data pipeline developed aims to simulate a process of ingesting data from an
 The OLAP database or **Data Warehouse** I decided to use is BigQuery, provided by Google Cloud Platform. To interact with BigQuery using our script, we need a service account key. To get that, the process is mainly straightforward:
 
 - Create a service account in the **Service Account** section of the **IAM & Admin** page.
-- Grant permissions of which cloud service we want to give acess to. (In this case **"BigQuery Admin"** or "BigQuery Data Editor")
+- Grant permissions of which cloud service we want to give access to. (In this case **"BigQuery Admin"** or "BigQuery Data Editor")
 - Create and download the Key, in the **Keys Tab**.
 
 After we got our key, the next step is to use it to interact with our Bigquery Python Client library installed using pip.
 
 The ingestion process are in three steps: **(1)** We first ingest it from the PostgreSQL database and store it in a temporary CSV file, **(2)** then we ensure the dataset is created in BigQuery (or creating it if it doesn't exist), and **(3)** lastly ingest the data from the temporary file and ingest it incrementally to our staging tables.
 
-Lastly, we use upsert (using `MERGE` query on the latest data) to ingest data the production tables. Ensuring in Analytics production there is no duplicate data found.
+Lastly, I use upsert (using `MERGE` query on the latest data) to ingest data the production tables. Ensuring in Analytics production there is no duplicate data found.
 
 ## dbt for Data Transformations
+
+dbt is used for **transforming data in the ELT (Extract Load Transform) process**, where the data is ingested first in the Data Warehouse then transformed.
+
+![dbt project overview](assets/dbt_linneage_path.png)
+
+In this project, using the 3 tables from the Ingestion process, we transform those tables into **Dimensional and Fact Tables**, cleansing it to ensure correct data format or to add any necessary columns. We use those tables to create **Datamarts**, tables that is intended for specific analysis or business case.
+
+To use dbt in Docker, my method is to use a **custom Dockerfile** installing `dbt-core` and `dbt-bigquery`, running it on the docker compose file. I then give access to Airflow in acessing our `docker.sock` enabling us the give commands directly to our docker containers. 
+
+This in result, helps us to give commands to directly to our dbt containers. Utilizing the `BashOperator` to give `dbt run` commands to each specific tasks (source tables, fact & dim tables, and datamarts).
+
 ## Web scraping using Selenium and BeautifulSoup
